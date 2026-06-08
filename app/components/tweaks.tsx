@@ -8,6 +8,7 @@ export interface Tweaks {
   font: "udefine" | "source" | "system";
   density: "regular" | "compact";
   showInlineSpecs: boolean;
+  model: string;
 }
 
 const STORAGE_KEY = "udefine-tweaks";

@@ -7,13 +7,13 @@ const openai = new OpenAI({
 });
 
 /* ================================================================
-   Base context shared across all passes
+   Base context
    ================================================================ */
 const BASE_CONTEXT = `Contexto del proyecto:
-- Cliente: Nordwind Manufacturing GmbH
+- Cliente: Construcciones y Auxiliar de Ferrocarriles
 - Engagement: S/4HANA Greenfield
 - Fase: Taller Fit-to-Standard
-- Ubicación: Presencial · Hamburgo
+- Ubicación: Presencial · Barcelona
 
 Módulos SAP:
 - MM: Gestión de Materiales
@@ -37,7 +37,7 @@ Reglas de IDs:
 - Standalone tasks: SPEC-001, SPEC-002, etc.
 - Épicas: SPEC-001, SPEC-002, etc. (consecutivos con los standalone).
 
-El campo "effort" debe ser en Jornadas-Persona (JP). Para standalone tasks estima el esfuerzo realista. Para épicas pon "0 JP" (se calculará automáticamente).
+El campo "effort" debe ser en Jornadas-Persona (JP). Para standalone tasks estima el esfuerzo realista y consolidado (no redondees hacia arriba cada pequeña tarea; ten en cuenta el trabajo compartido). Para épicas pon "0 JP" (se calculará automáticamente).
 
 Devuelve ÚNICAMENTE un objeto JSON:
 \`\`\`json
@@ -130,12 +130,18 @@ async function callOpenAI({
   temperature?: number;
   max_tokens?: number;
 }) {
-  const completion = await openai.chat.completions.create({
+  const isReasoning = model.startsWith("o") || (model.startsWith("gpt-5") && model !== "gpt-5-chat-latest");
+  const params: any = {
     model,
     messages: [{ role: "system", content: system }, ...messages],
-    temperature,
-    max_tokens,
-  });
+  };
+  if (isReasoning) {
+    params.max_completion_tokens = max_tokens;
+  } else {
+    params.temperature = temperature;
+    params.max_tokens = max_tokens;
+  }
+  const completion = await openai.chat.completions.create(params);
   return completion.choices[0].message.content || "";
 }
 
@@ -193,12 +199,15 @@ export async function POST(req: NextRequest) {
     /* -------- Parse request -------- */
     let messages: any[] = [];
     let documentText: string | null = null;
+    let model = "gpt-4o";
 
     const contentType = req.headers.get("content-type") || "";
     if (contentType.includes("multipart/form-data")) {
       const formData = await req.formData();
       const messagesJson = formData.get("messages") as string;
       if (messagesJson) messages = JSON.parse(messagesJson);
+      const modelParam = formData.get("model") as string | null;
+      if (modelParam) model = modelParam;
       const file = formData.get("file") as File | null;
       if (file) {
         const buffer = Buffer.from(await file.arrayBuffer());
@@ -214,6 +223,7 @@ export async function POST(req: NextRequest) {
     } else {
       const body = await req.json();
       messages = body.messages || [];
+      if (body.model) model = body.model;
     }
 
     const lastUserMsg = messages.filter((m: any) => m.role === "user").pop()?.content || "";
@@ -233,7 +243,7 @@ export async function POST(req: NextRequest) {
           /* -------- Pass 1: Breakdown -------- */
           sendEvent(controller, { type: "progress", message: "Estructurando épicas y tareas independientes…" });
           const breakdownRaw = await callOpenAI({
-            model: "gpt-4o",
+            model,
             system: BREAKDOWN_PROMPT,
             messages: [{ role: "user", content: `Mensaje del usuario:\n${lastUserMsg}${docCtx}` }],
           });
@@ -250,7 +260,7 @@ export async function POST(req: NextRequest) {
               const epic = epicShells[i];
               sendEvent(controller, { type: "progress", message: `Desglosando épica ${i + 1} de ${epicShells.length}: ${epic.title}…` });
               const expandRaw = await callOpenAI({
-                model: "gpt-4o",
+                model,
                 system: expandEpicPrompt(epic),
                 messages: [{ role: "user", content: `Descompón la épica ${epic.id} en tareas y subtareas.` }],
               });

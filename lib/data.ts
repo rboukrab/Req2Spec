@@ -81,10 +81,10 @@ export const MODULES: Record<string, ModuleInfo> = {
 };
 
 export const project: Project = {
-  customer: "Nordwind Manufacturing GmbH",
+  customer: "Construcciones y Auxiliar de Ferrocarriles",
   engagement: "S/4HANA Greenfield",
   phase: "Taller Fit-to-Standard",
-  location: "Presencial · Hamburgo",
+  location: "Presencial · Barcelona",
 };
 
 const SPEC_001: Spec = {

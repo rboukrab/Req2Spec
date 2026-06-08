@@ -27,7 +27,7 @@ export function TopBar({ project, specs, onExport }: TopBarProps) {
         />
         <div className="brand-mark" style={{ display: "none" }}><span>u</span></div>
         <span className="brand-divider" />
-        <span className="brand-sub">Req-to-Spec SAP</span>
+        <span className="brand-sub">Estimador de Esfuerzos SAP</span>
       </div>
       <div className="proj-chip">
         <span className="dot" />

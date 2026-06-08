@@ -27,10 +27,19 @@ const TWEAK_DEFAULTS = {
   font: "udefine" as const,
   density: "regular" as const,
   showInlineSpecs: true,
+  model: "gpt-4o" as const,
 };
 
 export default function Home() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  /* migrate invalid saved models */
+  useEffect(() => {
+    const validModels = ["gpt-5.5", "gpt-5.4", "gpt-5.4-mini", "gpt-5.2", "gpt-4.1", "gpt-4.1-mini", "gpt-4.1-nano", "gpt-4o", "gpt-4o-mini", "o3", "o3-mini"];
+    if (!validModels.includes(t.model)) {
+      setTweak("model", TWEAK_DEFAULTS.model);
+    }
+  }, [t.model, setTweak]);
 
   const [messages, setMessages] = useState<MessageData[]>([{ role: "bot", text: UD.greeting.text }]);
   const [apiMessages, setApiMessages] = useState<{ role: string; content: string }[]>([]);
@@ -97,6 +106,7 @@ export default function Home() {
         const formData = new FormData();
         formData.append("messages", JSON.stringify(updatedMessages));
         formData.append("file", file);
+        formData.append("model", t.model);
         res = await fetch("/api/chat", {
           method: "POST",
           body: formData,
@@ -105,7 +115,7 @@ export default function Home() {
         res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: updatedMessages }),
+          body: JSON.stringify({ messages: updatedMessages, model: t.model }),
         });
       }
 
@@ -151,7 +161,7 @@ export default function Home() {
       setProgress(null);
       setMessages((prev) => [...prev, { role: "bot", text: "Lo siento, ha ocurrido un error al procesar tu mensaje. Por favor, inténtalo de nuevo." }]);
     }
-  }, [apiMessages, addBotMessage]);
+  }, [apiMessages, addBotMessage, t.model]);
 
   const actions = {
     approve: (id: string) => setStates((p) => ({ ...p, [id]: { ...p[id], status: p[id]?.status === "approved" ? "draft" : "approved" } })),
@@ -237,6 +247,22 @@ export default function Home() {
         <TweakSection label="Comportamiento" />
         <TweakToggle label="Mostrar vista previa en el chat" value={t.showInlineSpecs}
           onChange={(v) => setTweak("showInlineSpecs", v)} />
+        <TweakSection label="Modelo de IA" />
+        <TweakSelect label="Modelo GPT" value={t.model}
+          options={[
+            { value: "gpt-4o", label: "GPT-4o  —  $2.50 / $10  ✅ recomendado" },
+            { value: "gpt-4.1", label: "GPT-4.1  —  $2 / $8" },
+            { value: "gpt-4.1-mini", label: "GPT-4.1 Mini  —  $0.40 / $1.60" },
+            { value: "gpt-4.1-nano", label: "GPT-4.1 Nano  —  $0.10 / $0.40" },
+            { value: "gpt-4o-mini", label: "GPT-4o Mini  —  $0.15 / $0.60" },
+            { value: "gpt-5.5", label: "GPT-5.5  —  $5 / $30  🐌 muy lento, timeout" },
+            { value: "gpt-5.4", label: "GPT-5.4  —  $2.50 / $15  🐌 muy lento, timeout" },
+            { value: "gpt-5.4-mini", label: "GPT-5.4 Mini  —  $0.75 / $4.50  🐌 muy lento, timeout" },
+            { value: "gpt-5.2", label: "GPT-5.2  —  $0.88 / $7  🐌 muy lento, timeout" },
+            { value: "o3", label: "o3  —  $2 / $8  ⚠️ reasoning tokens" },
+            { value: "o3-mini", label: "o3-mini  —  $1.10 / $4.40  ⚠️ reasoning tokens" },
+          ]}
+          onChange={(v) => setTweak("model", v)} />
       </TweaksPanel>
     </div>
   );
