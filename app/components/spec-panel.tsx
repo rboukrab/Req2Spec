@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { I } from "./icons";
 import { MODULES, type Spec } from "@/lib/data";
 
@@ -125,7 +127,7 @@ function SpecCard({
 
         <div className="spec-section">
           <h4>Descripción</h4>
-          <textarea className="spec-desc-edit" rows={4} value={draft.description} onChange={(e) => update("description", e.target.value)} />
+          <textarea className="spec-desc-edit" rows={8} value={draft.description} onChange={(e) => update("description", e.target.value)} placeholder="Soporta markdown: ## encabezados, listas, tablas, etc." />
         </div>
 
         <div className="spec-section">
@@ -175,14 +177,16 @@ function SpecCard({
 
       <div className="spec-meta">
         <ModuleTag mod={spec.module} />
-        <span className={`tag level-${spec.level}`}>{spec.level === "epic" ? "Épica" : spec.level === "task" ? "Tarea" : "Subtarea"}</span>
+        <span className={`tag level-${spec.level}`}>{spec.level === "task" ? "Tarea" : "Subtarea"}</span>
         <span className="tag type">{spec.type}</span>
         <span className={"tag " + (spec.custom ? "custom" : "fit")}>{spec.fit}</span>
       </div>
 
       <div className="spec-section">
         <h4>Descripción</h4>
-        <div className="spec-desc">{spec.description}</div>
+        <div className="spec-desc markdown-body">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{spec.description || ""}</ReactMarkdown>
+        </div>
       </div>
 
       <div className="spec-section">
@@ -266,7 +270,6 @@ function buildTree(specs: Spec[]): TreeNode[] {
 }
 
 function levelLabel(level: string) {
-  if (level === "epic") return "Épica";
   if (level === "task") return "Tarea";
   if (level === "subtask") return "Subtarea";
   return level;
@@ -315,6 +318,7 @@ function TreeView({ specs, onSelect }: { specs: Spec[]; onSelect: (spec: Spec) =
                 <span className="tree-spec-id">{node.spec!.id}</span>
                 <span className="tree-spec-priority"> · Prioridad {node.spec!.priority}</span>
                 <span className="tree-spec-title"> · {node.name}</span>
+                <span className="tree-spec-effort"> · {node.spec!.effort}</span>
               </>
             ) : (
               <span className="tree-branch-label">{node.name}</span>

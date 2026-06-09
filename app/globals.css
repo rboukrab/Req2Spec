@@ -448,18 +448,17 @@ button { font-family: inherit; cursor: pointer; }
 .tree-spec-id { font-family: var(--mono); font-weight: 700; color: var(--accent-ink); }
 .tree-spec-priority { color: var(--ink-3); }
 .tree-spec-title { color: var(--ink); font-weight: 600; }
+.tree-spec-effort { font-family: var(--mono); font-size: 11.5px; color: var(--accent-ink); background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; margin-left: 4px; }
 .tree-children { display: flex; flex-direction: column; gap: 2px; }
 
 .tree-badge {
   font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
   padding: 2px 6px; border-radius: 5px; margin-right: 6px; flex-shrink: 0;
 }
-.tree-badge-epic { background: var(--accent-soft); color: var(--accent-ink); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
-.tree-badge-task { background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
+.tree-badge-task { background: var(--accent-soft); color: var(--accent-ink); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 .tree-badge-subtask { background: var(--bg); color: var(--ink-3); border: 1px solid var(--line-2); }
 
-.tree-header.tree-level-epic { font-size: 13.5px; font-weight: 700; }
-.tree-header.tree-level-task { font-size: 12.5px; font-weight: 600; }
+.tree-header.tree-level-task { font-size: 13.5px; font-weight: 700; }
 .tree-header.tree-level-subtask { font-size: 12px; font-weight: 500; }
 
 /* spec detail view (tree leaf click) */
@@ -509,8 +508,7 @@ button { font-family: inherit; cursor: pointer; }
 .tag.type { background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
 .tag.fit { background: var(--accent-soft); color: var(--accent-ink); }
 .tag.custom { background: var(--warn-soft); color: var(--warn-ink); }
-.tag.level-epic { background: var(--accent-soft); color: var(--accent-ink); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
-.tag.level-task { background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
+.tag.level-task { background: var(--accent-soft); color: var(--accent-ink); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 .tag.level-subtask { background: var(--bg); color: var(--ink-3); border: 1px solid var(--line-2); }
 .tag .mini { font-family: var(--mono); font-size: 10px; opacity: .8; }
 
@@ -518,6 +516,27 @@ button { font-family: inherit; cursor: pointer; }
 .spec-section h4 { margin: 0 0 8px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-3); }
 .spec-desc { font-size: 13.5px; line-height: 1.6; color: var(--ink); }
 .spec-desc-edit { width: 100%; font-family: inherit; font-size: 13.5px; line-height: 1.6; color: var(--ink); border: 1.5px solid var(--accent); border-radius: 10px; padding: 9px 11px; outline: none; resize: vertical; min-height: 90px; background: var(--accent-soft); }
+
+/* markdown rendering in spec descriptions */
+.markdown-body { font-size: 13.5px; line-height: 1.65; color: var(--ink); }
+.markdown-body p { margin: 0 0 .6em; }
+.markdown-body p:last-child { margin-bottom: 0; }
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { margin: .8em 0 .4em; font-weight: 700; line-height: 1.35; color: var(--ink); }
+.markdown-body h1 { font-size: 15px; }
+.markdown-body h2 { font-size: 14px; }
+.markdown-body h3 { font-size: 13px; }
+.markdown-body h4 { font-size: 12px; }
+.markdown-body ul, .markdown-body ol { margin: .4em 0 .6em 1.1em; padding-left: .6em; }
+.markdown-body li { margin: .2em 0; }
+.markdown-body code { font-family: var(--mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; color: var(--ink-2); }
+.markdown-body pre { background: var(--surface-2); padding: 10px 12px; border-radius: 10px; overflow-x: auto; margin: .6em 0; }
+.markdown-body pre code { background: none; padding: 0; }
+.markdown-body blockquote { margin: .6em 0; padding: 6px 12px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+.markdown-body strong { font-weight: 700; color: var(--ink); }
+.markdown-body table { width: 100%; border-collapse: collapse; margin: .6em 0; font-size: 12.5px; }
+.markdown-body th, .markdown-body td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+.markdown-body th { background: var(--surface-2); font-weight: 700; }
+.markdown-body hr { border: none; border-top: 1px solid var(--line); margin: .8em 0; }
 
 .spec-form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 14px; padding: 10px 16px 4px; }
 .spec-form-grid.two-col { grid-template-columns: repeat(2, 1fr); }

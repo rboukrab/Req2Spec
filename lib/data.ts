@@ -27,7 +27,7 @@ export interface Spec {
   process?: string;
   subProcess?: string;
   parentId?: string;
-  level: "epic" | "task" | "subtask";
+  level: "task" | "subtask";
 }
 
 export interface Project {
@@ -109,7 +109,7 @@ const SPEC_001: Spec = {
   question: "Confirmar la jerarquía de aprobación para pedidos superiores a 250.000 € (liberación simple o doble).",
   process: "Compras",
   subProcess: "Liberación de pedidos",
-  level: "epic",
+  level: "task",
 };
 
 const SPEC_002: Spec = {
@@ -134,7 +134,7 @@ const SPEC_002: Spec = {
   question: "¿Qué área de control de crédito y categorías de riesgo aplican a la cartera de clientes de la UE frente a APAC?",
   process: "Ventas",
   subProcess: "Gestión de crédito",
-  level: "epic",
+  level: "task",
 };
 
 const SPEC_003: Spec = {
@@ -159,7 +159,7 @@ const SPEC_003: Spec = {
   question: "Confirmar la aprobación del responsable de tolerancias y si las desviaciones de flete/impuestos están en alcance.",
   process: "Cuentas por pagar",
   subProcess: "Verificación de facturas",
-  level: "epic",
+  level: "task",
 };
 
 const SPEC_004: Spec = {
@@ -184,7 +184,7 @@ const SPEC_004: Spec = {
   question: "Confirmar el modelo de autorización: ¿los responsables ven todos los centros o solo el suyo?",
   process: "Producción",
   subProcess: "Cuadro de mando",
-  level: "epic",
+  level: "task",
 };
 
 export const greeting: Greeting = {
