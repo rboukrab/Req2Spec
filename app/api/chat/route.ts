@@ -342,7 +342,7 @@ export async function POST(req: NextRequest) {
     /* -------- Parse request -------- */
     let messages: any[] = [];
     let documentText: string | null = null;
-    let model = "gpt-4o";
+    let model = "gpt-5.4";
 
     const contentType = req.headers.get("content-type") || "";
     if (contentType.includes("multipart/form-data")) {

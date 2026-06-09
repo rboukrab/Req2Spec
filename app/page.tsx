@@ -27,7 +27,7 @@ const TWEAK_DEFAULTS = {
   font: "udefine" as const,
   density: "regular" as const,
   showInlineSpecs: true,
-  model: "gpt-4o" as const,
+  model: "gpt-5.4" as const,
 };
 
 export default function Home() {
@@ -250,13 +250,14 @@ export default function Home() {
         <TweakSection label="Modelo de IA" />
         <TweakSelect label="Modelo GPT" value={t.model}
           options={[
-            { value: "gpt-4o", label: "GPT-4o  —  $2.50 / $10  ✅ recomendado" },
+            { value: "gpt-4o", label: "GPT-4o  —  $2.50 / $10" },
+            { value: "gpt-5.4", label: "GPT-5.4  —  $2.50 / $15  ✅ recomendado" },
             { value: "gpt-4.1", label: "GPT-4.1  —  $2 / $8" },
             { value: "gpt-4.1-mini", label: "GPT-4.1 Mini  —  $0.40 / $1.60" },
             { value: "gpt-4.1-nano", label: "GPT-4.1 Nano  —  $0.10 / $0.40" },
             { value: "gpt-4o-mini", label: "GPT-4o Mini  —  $0.15 / $0.60" },
             { value: "gpt-5.5", label: "GPT-5.5  —  $5 / $30  🐌 muy lento, timeout" },
-            { value: "gpt-5.4", label: "GPT-5.4  —  $2.50 / $15  🐌 muy lento, timeout" },
+
             { value: "gpt-5.4-mini", label: "GPT-5.4 Mini  —  $0.75 / $4.50  🐌 muy lento, timeout" },
             { value: "gpt-5.2", label: "GPT-5.2  —  $0.88 / $7  🐌 muy lento, timeout" },
             { value: "o3", label: "o3  —  $2 / $8  ⚠️ reasoning tokens" },
